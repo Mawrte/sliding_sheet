@@ -55,6 +55,11 @@ Future<T?> showSlidingBottomSheet<T>(
             Widget sheet = SlidingSheet._(
               route: route,
               controller: controller,
+              builder: dialog.builder,
+              customBuilder: dialog.customBuilder,
+              headerBuilder: dialog.headerBuilder,
+              footerBuilder: dialog.footerBuilder,
+              listener: dialog.listener,
               snapSpec: snapSpec,
               duration: dialog.duration,
               color: dialog.color ??
@@ -71,10 +76,6 @@ Future<T?> showSlidingBottomSheet<T>(
               cornerRadius: dialog.cornerRadius,
               cornerRadiusOnFullscreen: dialog.cornerRadiusOnFullscreen,
               closeOnBackdropTap: dialog.dismissOnBackdropTap,
-              builder: dialog.builder,
-              headerBuilder: dialog.headerBuilder,
-              footerBuilder: dialog.footerBuilder,
-              listener: dialog.listener,
               scrollSpec: dialog.scrollSpec,
               maxWidth: dialog.maxWidth,
               closeSheetOnBackButtonPressed: false,
@@ -113,7 +114,10 @@ Future<T?> showSlidingBottomSheet<T>(
 /// A wrapper class to show a [SlidingSheet] as a bottom sheet dialog.
 class SlidingSheetDialog {
   /// {@macro sliding_sheet.builder}
-  final SheetBuilder builder;
+  final SheetBuilder? builder;
+
+  /// {@macro sliding_sheet.customBuilder}
+  final CustomSheetBuilder? customBuilder;
 
   /// {@macro sliding_sheet.headerBuilder}
   final SheetBuilder? headerBuilder;
@@ -199,7 +203,8 @@ class SlidingSheetDialog {
 
   /// Creates a wrapper class to show a [SlidingSheet] as a bottom sheet dialog.
   const SlidingSheetDialog({
-    required this.builder,
+    this.builder,
+    this.customBuilder,
     this.headerBuilder,
     this.footerBuilder,
     this.snapSpec = const SnapSpec(),
@@ -232,8 +237,7 @@ class SlidingSheetDialog {
 
 /// A transparent route for a bottom sheet dialog.
 class _SlidingSheetRoute<T> extends PageRoute<T> {
-  final Widget Function(BuildContext, Animation<double>, _SlidingSheetRoute<T>)
-      builder;
+  final Widget Function(BuildContext, Animation<double>, _SlidingSheetRoute<T>) builder;
   final Duration duration;
   _SlidingSheetRoute({
     required this.builder,

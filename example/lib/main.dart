@@ -102,7 +102,8 @@ class _ExampleState extends State<Example> {
       body: _buildBody(),
       headerBuilder: buildHeader,
       footerBuilder: buildFooter,
-      builder: buildChild,
+      // builder: buildChild,
+      customBuilder: buildInfiniteChild,
     );
   }
 
@@ -254,6 +255,22 @@ class _ExampleState extends State<Example> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildInfiniteChild(
+    BuildContext context,
+    ScrollController controller,
+    SheetState state,
+  ) {
+    return ListView.separated(
+      controller: controller,
+      itemBuilder: (context, index) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: Text('$index'),
+      ),
+      separatorBuilder: (context, index) => const Divider(),
+      itemCount: 200,
     );
   }
 
