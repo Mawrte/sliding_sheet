@@ -324,7 +324,6 @@ class _SlidingSheetScrollPosition extends ScrollPositionWithSingleContext {
     if (velocity == 0.0 ||
         (isMovingDown && shouldScroll) ||
         (isMovingUp && extent.isAtMax)) {
-      print([snappings, currentExtent, minExtent]);
       super.goBallistic(velocity);
       return;
     }
