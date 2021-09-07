@@ -171,6 +171,11 @@ class SlidingSheet extends StatefulWidget {
   /// {@endtemplate}
   final bool isBackdropInteractable;
 
+  /// {@template sliding_sheet.isBackdropInteractableWhenCollapsed}
+  /// If true, the backDrop will also be interactable when the sheet is collapsed
+  /// {@endtemplate}
+  final bool isBackdropInteractableWhenCollapsed;
+
   /// A widget that is placed behind the sheet.
   ///
   /// You can apply a parallax effect to this widget by
@@ -289,6 +294,7 @@ class SlidingSheet extends StatefulWidget {
     double? minHeight,
     bool closeOnBackButtonPressed = false,
     bool isBackdropInteractable = false,
+    bool isBackdropInteractableWhenCollapsed = false,
     Widget? body,
     ParallaxSpec? parallaxSpec,
     double axisAlignment = 0.0,
@@ -321,6 +327,8 @@ class SlidingSheet extends StatefulWidget {
           minHeight: minHeight,
           closeSheetOnBackButtonPressed: closeOnBackButtonPressed,
           isBackdropInteractable: isBackdropInteractable,
+          isBackdropInteractableWhenCollapsed:
+              isBackdropInteractableWhenCollapsed,
           body: body,
           parallaxSpec: parallaxSpec,
           axisAlignment: axisAlignment,
@@ -355,6 +363,7 @@ class SlidingSheet extends StatefulWidget {
     required this.minHeight,
     required this.closeSheetOnBackButtonPressed,
     required this.isBackdropInteractable,
+    required this.isBackdropInteractableWhenCollapsed,
     required this.axisAlignment,
     required this.extendBody,
     required this.liftOnScrollHeaderElevation,
@@ -1093,7 +1102,8 @@ class _SlidingSheetState extends State<SlidingSheet>
         }();
 
         final backDrop = IgnorePointer(
-          ignoring: opacity < 0.05,
+          ignoring:
+              widget.isBackdropInteractableWhenCollapsed || opacity < 0.05,
           child: Opacity(
             opacity: opacity,
             child: Container(
@@ -1109,7 +1119,9 @@ class _SlidingSheetState extends State<SlidingSheet>
             : _onDismissPrevented(backDrop: true);
 
         // see: https://github.com/BendixMa/sliding-sheet/issues/30
-        if (opacity >= 0.05 || didStartDragWhenNotCollapsed) {
+        if (widget.isBackdropInteractableWhenCollapsed ||
+            opacity >= 0.05 ||
+            didStartDragWhenNotCollapsed) {
           if (widget.isBackdropInteractable) {
             return _delegateInteractions(backDrop,
                 onTap: widget.closeOnBackdropTap ? onTap : null);
